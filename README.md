@@ -1,4 +1,4 @@
-# app9anotacoesdiarias
+# appAnotacoesDiarias
 
 A new Flutter application.
 

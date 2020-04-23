@@ -130,7 +130,7 @@ class _AnotacoesDiariasState extends State<AnotacoesDiarias> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Minhas Notes"),
+        title: Text("Anotações Diárias"),
         backgroundColor: Colors.lightGreen,
       ),
       body: Column(
