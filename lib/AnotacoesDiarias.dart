@@ -16,15 +16,13 @@ class _AnotacoesDiariasState extends State<AnotacoesDiarias> {
   List<Anotacao> _anotacoes = List<Anotacao>();
 
   _telaCadastro({Anotacao anotacao}) {
+    String textoSalvarAtualizar = "";
 
-    String textoSalvarAtualizar= "";
-
-    if(anotacao == null){
+    if (anotacao == null) {
       _titulo.clear();
       _descricao.clear();
       textoSalvarAtualizar = "Salvar";
-    }
-    else{
+    } else {
       _titulo.text = anotacao.titulo;
       _descricao.text = anotacao.descricao;
       textoSalvarAtualizar = "Atualizar";
@@ -70,11 +68,13 @@ class _AnotacoesDiariasState extends State<AnotacoesDiarias> {
     String titulo = _titulo.text;
     String descricao = _descricao.text;
 
-    if(anotacaoSelecionada == null){//salvando
-      Anotacao anotacao = Anotacao(titulo, descricao, DateTime.now().toString());
+    if (anotacaoSelecionada == null) {
+      //salvando
+      Anotacao anotacao =
+      Anotacao(titulo, descricao, DateTime.now().toString());
       int resultado = await _db.salvarAnotacao(anotacao);
-    }
-    else{//atualizando
+    } else {
+      //atualizando
       anotacaoSelecionada.titulo = titulo;
       anotacaoSelecionada.descricao = descricao;
       anotacaoSelecionada.data = DateTime.now().toString();
@@ -114,9 +114,30 @@ class _AnotacoesDiariasState extends State<AnotacoesDiarias> {
     return dataFormatada;
   }
 
-  _removerAnotacao(int id)async{
-    await _db.removerAnotacao(id);
-    _recuperarAnotacoes();
+  _removerAnotacao(int id) async {
+      await _db.removerAnotacao(id);
+      _recuperarAnotacoes();
+  }
+  _confirmarExlusao(int id){
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Tem certeza que deseja excluir?"),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("Cancelar")),
+              FlatButton(
+                  onPressed: () {
+                    _removerAnotacao(id);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Confirmar")),
+            ],
+          );
+        });
   }
 
   @override
@@ -162,7 +183,7 @@ class _AnotacoesDiariasState extends State<AnotacoesDiarias> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _removerAnotacao(item.id);
+                                _confirmarExlusao(item.id);
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(right: 16),
